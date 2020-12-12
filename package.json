@@ -2,6 +2,7 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "This bot was created to learn how more JavaScript and make a bot for a Discord server.",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +10,7 @@
   "author": "John Hoang",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.3",
     "discord.js": "^12.5.1"
   }
 }
