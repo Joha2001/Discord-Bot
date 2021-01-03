@@ -12,9 +12,11 @@ const {prefix} = require("../config.json")
 */
 module.exports = { 
 	name: 'music',
-  description: `Listen to music on the bot from YouTube!`,
+  description: `Listen to music on the bot from YouTube! See \`${prefix}music help\` for more info! ***MUSIC COMMANDS DO NOT WORK IN DMS!***`,
   aliases: ['music', 'm'],
-	execute(client, message, args) {
+  permissions: ['SEND_MESSAGES','CONNECT','SPEAK'],
+  permissionsError: 'You do not have the roles   to use this command!',
+	execute(client, message, args) {  
         const serverQueue = queue.get(message.guild.id);
         if (args[0] === `play`) {
             runner(message, args[1], serverQueue);
@@ -29,7 +31,7 @@ module.exports = {
             help(message);
         }
         else {
-            message.reply(`**Incorrect syntax, check ${prefix}help for more information about ${prefix}music commands.**`);
+            message.reply(`**Incorrect syntax, check ${prefix}music help for more information about ${prefix}music commands.**`);
         }
 	},
 };

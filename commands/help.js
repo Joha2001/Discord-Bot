@@ -7,6 +7,8 @@ const { prefix } = require('../config.json');
 module.exports = {
 	name: 'help',
 	description: 'Gives a list of all available commands!',
+	permissions: 'SEND_MESSAGES',
+    permissionsError: 'You do not have the roles to use this command!',
 	async execute(client, message, args) {
 		const data = [];
 		const { commands } = message.client;
