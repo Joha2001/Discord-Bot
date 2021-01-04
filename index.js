@@ -32,10 +32,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
 });
 
 client.on('message', async message => {
-    if (message.content === '!join') {
-		client.emit('guildMemberAdd', message.member);
-	}
-    
+
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);

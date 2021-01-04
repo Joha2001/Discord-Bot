@@ -46,14 +46,18 @@ module.exports = {
 	    ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 	    // Slightly smaller text placed above the member's display name
-	    ctx.font = '28px sans-serif';
-	    ctx.fillStyle = '#ffffff';
-	    ctx.fillText('Welcome to the server,', canvas.width / 2.5, canvas.height / 3.5);
+        ctx.font = '32px Berlin Sans FB Demi';
+	    ctx.fillStyle = '#dd365b';
+        ctx.fillText('Welcome to the server,', canvas.width / 2.5, canvas.height / 3.5);
+        
 
-	    // Add an exclamation point here and below
-	    ctx.font = applyText(canvas, `${member.displayName}!`);
-	    ctx.fillStyle = '#ffffff';
-	    ctx.fillText(`${member.displayName}!`, canvas.width / 2.5, canvas.height / 1.8);
+        // Add an exclamation point here and below
+	    ctx.font = '60px Berlin Sans FB Demi';
+	    ctx.fillStyle = '#dd365b';
+        ctx.fillText(`${member.displayName}!`, canvas.width / 2.5, canvas.height / 1.8);
+        ctx.font = '32px Berlin Sans FB Demi';;
+	    ctx.fillStyle = '#dd365b';
+	    ctx.fillText(`Member #${member.guild.memberCount}`, canvas.width / 2.5, canvas.height / 1.4);
 
 	    ctx.beginPath();
 	    ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
