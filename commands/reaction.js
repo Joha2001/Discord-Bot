@@ -1,10 +1,13 @@
 /*
+    Code taken and adapted from: https://www.youtube.com/watch?v=bJwPYCy17G4
     List of things to do with Reaction Bot:
+    [] Embeds
     
 */
 const {prefix} = require("../config.json");
 let channelId = '';
 let messageId = '';
+var emojis = [];
 module.exports = { 
     name: 'reaction',
     description: `Personalize the way you welcome people to your discord channel! See \`${prefix}welcome help\` for more info!`,
@@ -32,7 +35,23 @@ module.exports = {
         }
     },
     async executeReaction(reaction, user, add) {
-        
+        if (reaction.message.channel.id === channelId) {
+            const emoji = reaction._emoji.name;
+            const {guild} = reaction.message;
+
+            const roleName = emojis[emoji];
+            if (!roleName) {
+                return ;
+            }
+            const role = guild.roles.cache.find((role) => role.name === roleName);
+            const member = guild.members.cache.find((member) => member.id === user.id);
+            if (add) {
+                member.roles.add(role);
+            }
+            else {
+                member.roles.remove(role);
+            }
+        }
     },
 };
 
@@ -87,9 +106,19 @@ async function add(message, args){
     try {
         const channel = message.guild.channels.cache.get(channelId);
         const msg = channel.messages.cache.get(messageId);
-        
-        const reactionEmoji = message.guild.emojis.cache.find(emoji => emoji.name === 'ayaya');
+        let emojiName = args[1];
+        if (emojiName.lastIndexOf(':') != -1)
+            emojiName = emojiName.substring(2, emojiName.lastIndexOf(':'));
+        const reactionEmoji = message.guild.emojis.cache.find(emoji => emoji.name === emojiName);
         msg.react(reactionEmoji);
+        let emojiRole = '';
+        for (const value of args) {
+            if (value != args[0] && value != args[1]) //There is most likely a better way to ignore the first argument.
+                 emojiRole += value + ` `;
+        }
+        emojiRole = emojiRole.substring(0, emojiRole.length - 1);
+        message.reply("The reaction role for "+ args[1] + " with the role " + emojiRole +" was added!");
+        emojis[emojiName] = emojiRole;
     }
     catch {
         message.reply("**I could not add the emoji! Please check \`${prefix}reaction help\` for more info!**");
@@ -99,6 +128,18 @@ async function add(message, args){
 function remove(message, args) {
     if (channelId === '') return message.reply("**There is no channel set!**");
     if (messageId === '') return message.reply("**There is no message set!**");
-    const channel = message.guild.channels.cache.get(channelId);
-    const msg = channel.messages.cache.get(messageId);
+    try {
+        const channel = message.guild.channels.cache.get(channelId);
+        const msg = channel.messages.cache.get(messageId);
+        let emojiName = args[1];
+            if (emojiName.lastIndexOf(':') != -1)
+                emojiName = emojiName.substring(2, emojiName.lastIndexOf(':'));
+        delete emojis[emojiName];
+        msg.reactions.cache.get(message.guild.emojis.cache.find(emoji => emoji.name === emojiName).id).remove().catch(error => console.error('Failed to remove reactions: ', error));
+        message.reply("The reaction role for " + args[1] + " was removed!")
+    }
+    catch {
+        message.reply("**I could not remove the emoji! Please check \`${prefix}reaction help\` for more info!**");
+    }
+
 }

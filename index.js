@@ -27,7 +27,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
-    executeReaction(reaction, user, false);
+    if (!user.bot)
+        executeReaction(reaction, user, false);
 });
 
 client.on('message', async message => {

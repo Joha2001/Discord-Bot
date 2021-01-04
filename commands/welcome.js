@@ -22,8 +22,8 @@ module.exports = {
         if (args[0] === `setchannel`) {
             setchannel(message, args[1]);
         }
-        else if (args[0] === `setmessage`) {
-            setmessage(message, args);
+        else if (args[0] === `send`) {
+            send(message, args);
         }
         else if (args[0] === undefined || args[0] === `help`) {
             help(message);
@@ -72,7 +72,7 @@ module.exports = {
 function help(message) { // Skips the current song and goes to the next one (if there is another)
     message.author.send(`***Welcome Command List: To use welcome commands, do*** \`${prefix}welcome [command] <args>\`
     \n\`setchannel <#channel>\` Sets the channel to display the welcome message!
-    \n\`setmessage <message>\` Sets the message to display! To @ the user in the message, use {user}! If you change your server name often, considering using {server} so you don't need to change the message when you change the name!`);
+    \n\`send <message>\` Sets the message to display! To @ the user in the message, use {user}! If you change your server name often, considering using {server} so you don't need to change the message when you change the name!`);
 }
 
 function setchannel(message, channel) {//Sets the channel to display welcome messages using the channelId
@@ -90,10 +90,10 @@ function setchannel(message, channel) {//Sets the channel to display welcome mes
             message.reply("There was an error setting the channel to " + channel);
     }
 }
-function setmessage(message, args) {
+function send(message, args) {
     try {
         for (const value of args) {
-            if (value != `setmessage`) //There is most likely a better way to ignore the first argument.
+            if (value != `send`) //There is most likely a better way to ignore the first argument.
                 serverMsg += value + ` `;
         }
         message.reply("The message has been set to :\n" + serverMsg);
