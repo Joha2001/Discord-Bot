@@ -109,8 +109,13 @@ async function add(message, args){
         let emojiName = args[1];
         if (emojiName.lastIndexOf(':') != -1)
             emojiName = emojiName.substring(2, emojiName.lastIndexOf(':'));
-        const reactionEmoji = message.guild.emojis.cache.find(emoji => emoji.name === emojiName);
-        msg.react(reactionEmoji);
+        try {
+            const reactionEmoji = message.guild.emojis.cache.find(emoji => emoji.name === emojiName);
+            msg.react(reactionEmoji);
+        }
+        catch {
+            msg.react(emojiName);
+        }
         let emojiRole = '';
         for (const value of args) {
             if (value != args[0] && value != args[1]) //There is most likely a better way to ignore the first argument.
@@ -121,7 +126,7 @@ async function add(message, args){
         emojis[emojiName] = emojiRole;
     }
     catch {
-        message.reply("**I could not add the emoji! Please check \`${prefix}reaction help\` for more info!**");
+        message.reply(`**I could not add the emoji! Please check \`${prefix}reaction help\` for more info!**`);
     }
     
 }
@@ -135,7 +140,12 @@ function remove(message, args) {
             if (emojiName.lastIndexOf(':') != -1)
                 emojiName = emojiName.substring(2, emojiName.lastIndexOf(':'));
         delete emojis[emojiName];
-        msg.reactions.cache.get(message.guild.emojis.cache.find(emoji => emoji.name === emojiName).id).remove().catch(error => console.error('Failed to remove reactions: ', error));
+        try {
+            msg.reactions.cache.get(message.guild.emojis.cache.find(emoji => emoji.name === emojiName).id).remove().catch(error => console.error('Failed to remove reactions: ', error));
+        }
+        catch {
+            msg.reactions.cache.get(emojiName).remove().catch(error => console.error('Failed to remove reactions: ', error));
+        }
         message.reply("The reaction role for " + args[1] + " was removed!")
     }
     catch {
